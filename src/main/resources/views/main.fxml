@@ -1,0 +1,47 @@
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Label?>
+
+<GridPane>
+	<columnConstraints>
+		<ColumnConstraints hgrow="SOMETIMES" />
+	</columnConstraints>
+
+	<rowConstraints>
+		<RowConstraints vgrow="SOMETIMES" />
+    	<RowConstraints vgrow="NEVER" />
+  	</rowConstraints>
+  
+	<AnchorPane GridPane.rowIndex="1">
+		<MenuBar
+			AnchorPane.leftAnchor="0"
+			AnchorPane.rightAnchor="0">
+			<Menu text="Simulation">
+				<MenuItem text="Start" />
+				<MenuItem text="Pause" />
+				<MenuItem text="Reset" />
+			</Menu>
+			<Menu text="Add">
+				<MenuItem text="Predator" />
+				<MenuItem text="Prey" />
+			</Menu>
+			<Menu text="View">
+				<MenuItem text="Predators" />
+				<MenuItem text="Preys" />
+				<MenuItem text="Junctions" />
+				<MenuItem text="Destinations" />
+			</Menu>
+			<Menu text="About" />
+		</MenuBar>
+		
+		<Label
+			AnchorPane.topAnchor="5"
+			AnchorPane.rightAnchor="10"
+			text="coordinates, timer" />
+	</AnchorPane>
+</GridPane>
