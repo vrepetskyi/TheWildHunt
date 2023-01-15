@@ -2,12 +2,18 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.Group?>
 
-<GridPane>
+<GridPane
+	xmlns:fx="http://javafx.com/fxml"
+	fx:controller="main.java.controllers.MainController">
+	
 	<columnConstraints>
 		<ColumnConstraints hgrow="SOMETIMES" />
 	</columnConstraints>
@@ -16,6 +22,14 @@
 		<RowConstraints vgrow="SOMETIMES" />
     	<RowConstraints vgrow="NEVER" />
   	</rowConstraints>
+  	
+  	<ScrollPane
+  		fx:id="zoomScrollPane"
+  		hbarPolicy="NEVER"
+  		vbarPolicy="NEVER"
+  		pannable="true">
+	 		<Group fx:id="zoomContent" />
+  	</ScrollPane>
   
 	<AnchorPane GridPane.rowIndex="1">
 		<MenuBar
