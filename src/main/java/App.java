@@ -25,7 +25,7 @@ public class App extends Application {
 	private static Simulation simulation;
 
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage stage) {
 		try {
 			Vector2D mapDimensions = new Vector2D(32, 18);
 			SimulationBuilder simulationBuilder = new SimulationBuilder(mapDimensions);
@@ -34,15 +34,14 @@ public class App extends Application {
 			App.simulation = simulationBuilder.getResult();
 
 			Parent root = FXMLLoader.load(getClass().getResource("../resources/views/main.fxml"));
-			primaryStage.setTitle("TheWildHunt");
-			primaryStage.setScene(new Scene(root, 800, 600));
-			primaryStage.show();
-
-//			Parent list = FXMLLoader.load(getClass().getResource("../resources/views/list.fxml"));
-//			Stage stage = new Stage();
-//			stage.setTitle("Predators");
-//			stage.setScene(new Scene(list, 250, 350));
-//			stage.show();
+			Scene scene = new Scene(root, 800, 600);
+			scene.getStylesheets().add(getClass().getResource("../resources/styles/main.css").toExternalForm());
+			
+			stage.setTitle("The Wild Hunt: Savana Edition");
+			stage.setScene(scene);
+			stage.setMinWidth(360);
+			stage.setMinHeight(300);
+			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

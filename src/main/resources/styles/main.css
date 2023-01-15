@@ -1,0 +1,32 @@
+/* TODO */
+#mapContainer .label:hover {
+	-fx-background: gray;
+	-fx-text-fill: red;
+}
+
+#menu {
+	-fx-background-insets: 0;
+	-fx-border-color: orange;
+	-fx-border-width: 3px;
+	-fx-border-style: hidden hidden solid hidden;
+}
+
+#simulationMenu {
+	-fx-background-color: olive;
+}
+
+#simulationMenu > .label {
+	-fx-text-fill: white;
+}
+
+#menu .menu-button:hover,
+#menu .menu-button:showing,
+#menu .menu-item:hover,
+#menu .menu-item:focused {
+	-fx-background-color: olive; 
+}
+
+#simulationMenu:hover,
+#simulationMenu:showing {
+	-fx-background-color: orange !important;
+}
