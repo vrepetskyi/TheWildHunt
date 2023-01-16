@@ -32,10 +32,9 @@
 	  		fitToWidth="true"
 	  		fitToHeight="true"
 	  		styleClass="edge-to-edge">
+  			<!-- centres the map when zoomed out -->
   			<StackPane>
-		  		<Pane fx:id="mapScaler">
-			 		<Pane fx:id="mapContainer" />
-		  		</Pane>
+		 		<Pane fx:id="mapScaler" />
   			</StackPane>
 	  	</ScrollPane>
   

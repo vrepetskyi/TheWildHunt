@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -28,9 +29,6 @@ public class MainController implements Initializable {
 
 	@FXML
 	private Pane mapScaler;
-
-	@FXML
-	private Pane mapContainer;
 	
 	@FXML
 	private MenuBar menu;
@@ -41,27 +39,41 @@ public class MainController implements Initializable {
 	@FXML
 	private Label status;
 	
-	private void updateMapScale(Scale mapScale, Vector2D renderedMapSize) {
-		updateMapScale(mapScale, renderedMapSize, mapScale.getX());
-	}
-	
 	private void updateMapScale(Scale mapScale, Vector2D renderedMapSize, Double targetScale) {
 		// the map should cover at least 75% of the space 
 		Double minScale = mapScroller.getWidth() / renderedMapSize.getX() * 0.75;
+		// limit scaling by map's resolution
 		Double maxScale = 1.0;
 		
 		mapScale.setX(Math.min(Math.max(minScale, targetScale), maxScale));
 		mapScale.setY(mapScale.getX());
 		
-		mapScaler.setPrefWidth(renderedMapSize.getX() * mapScale.getX());
-		mapScaler.setPrefHeight(renderedMapSize.getY() * mapScale.getY());
+		Double prefWidth = renderedMapSize.getX() * mapScale.getX();
+		Double prefHeight = renderedMapSize.getY() * mapScale.getY();
+		
+		Double deltaVisibleX = (mapScroller.getWidth() / prefWidth) - (mapScroller.getWidth() / mapScaler.getPrefWidth());
+		Double deltaVisibleY = (mapScroller.getHeight() / prefHeight) - (mapScroller.getHeight() / mapScaler.getPrefHeight());
+		
+		mapScaler.setPrefWidth(prefWidth);
+		mapScaler.setPrefHeight(prefHeight);
+		
+		if (!deltaVisibleX.isNaN()) {			
+			mapScroller.setHvalue(Math.min(Math.max(0, mapScroller.getHvalue() - deltaVisibleX), 1));
+		}
+		if (!deltaVisibleY.isNaN()) {			
+			mapScroller.setVvalue(Math.min(Math.max(0, mapScroller.getVvalue() - deltaVisibleY), 1));
+		}		
+	}
+	
+	private void updateMapScale(Scale mapScale, Vector2D renderedMapSize) {
+		updateMapScale(mapScale, renderedMapSize, mapScale.getX());
 	}
 	
 	private void setupScaling() {
 		Scale mapScale = new Scale();
 		mapScale.setPivotX(0);
 		mapScale.setPivotY(0);
-		mapContainer.getTransforms().add(mapScale);
+		mapScaler.getTransforms().add(mapScale);
 
 		mapScaler.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 		mapScaler.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
@@ -82,15 +94,19 @@ public class MainController implements Initializable {
 		mapScroller.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent e) {
-				Double targetScale = mapScale.getX() + e.getDeltaY() * 0.01;
-				updateMapScale(mapScale, renderedMapSize, targetScale);
+				if (e.getDeltaY() != 0) {					
+					Double targetScale = mapScale.getX() + e.getDeltaY() * 0.001;
+					updateMapScale(mapScale, renderedMapSize, targetScale);
+				}
 				e.consume();
 			}
 		});
 	}
 	
 	private void renderMap() {
-		ObservableList<Node> renderedTiles = mapContainer.getChildren();
+		// TODO: multiple layers
+		
+		ObservableList<Node> renderedTiles = mapScaler.getChildren();
 
 		Integer columnIndex = 0;
 		for (Tile[] column : App.getSimulation().getMap().getTiles()) {
@@ -100,7 +116,9 @@ public class MainController implements Initializable {
 			for (Tile simulationTile : column) {
 				Integer yTranslation = rowIndex * tileSize;
 
-				Label tileToRender = new Label(columnIndex.toString() + rowIndex.toString());
+				ImageView image = new ImageView(getClass().getResource("../../resources/images/tile-background.png").toExternalForm());
+				
+				Pane tileToRender = new Pane(image);
 				
 				tileToRender.setPrefWidth(tileSize);
 				tileToRender.setPrefHeight(tileSize);
