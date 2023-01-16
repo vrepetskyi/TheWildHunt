@@ -39,13 +39,23 @@ public class MainController implements Initializable {
 	@FXML
 	private Label status;
 	
+	private Double clamp(Double min, Double value, Double max) {
+		return Math.min(Math.max(min, value), max);
+	}
+	
 	private void updateMapScale(Scale mapScale, Vector2D renderedMapSize, Double targetScale) {
 		// the map should cover at least 75% of the space 
 		Double minScale = mapScroller.getWidth() / renderedMapSize.getX() * 0.75;
 		// limit scaling by map's resolution
 		Double maxScale = 1.0;
 		
-		mapScale.setX(Math.min(Math.max(minScale, targetScale), maxScale));
+		Double clampedScale = clamp(minScale, targetScale, maxScale);
+		
+		if (clampedScale == mapScale.getX()) {
+			return;
+		}
+		
+		mapScale.setX(clampedScale);
 		mapScale.setY(mapScale.getX());
 		
 		Double oldWidth = mapScaler.getPrefWidth();
@@ -61,24 +71,23 @@ public class MainController implements Initializable {
 		Double deltaWidth = mapScaler.getPrefWidth() - oldWidth;
 		Double deltaHvalue = -deltaWidth / (mapScaler.getWidth() - mapScroller.getWidth());
 		
-		Double viewLeftMapX = (mapScaler.getWidth() - mapScroller.getWidth()) * mapScroller.getHvalue();
+		Double viewLeftMapX = (mapScaler.getPrefWidth() - mapScroller.getWidth()) * mapScroller.getHvalue();
 		Double viewCenterMapX = viewLeftMapX + mapScroller.getWidth() / 2;
-		Double viewCenterMapXFraction = viewCenterMapX / mapScaler.getWidth();
+		Double viewCenterMapXFraction = viewCenterMapX / mapScaler.getPrefWidth();
 		
-		if (!deltaHvalue.isNaN() && !viewCenterMapXFraction.isNaN()) {
-			mapScroller.setHvalue(Math.min(Math.max(0, mapScroller.getHvalue() - deltaHvalue * viewCenterMapXFraction), 1));
+		if (Double.isFinite(deltaHvalue) && Double.isFinite(viewCenterMapXFraction)) {
+			mapScroller.setHvalue(clamp(0.0, mapScroller.getHvalue() - deltaHvalue * viewCenterMapXFraction, 1.0));
 		}
-		
 		// vertically
 		Double deltaHeight = mapScaler.getPrefHeight() - oldHeight;
-		Double deltaVvalue = -deltaHeight / (mapScaler.getHeight() - mapScroller.getHeight());
+		Double deltaVvalue = -deltaHeight / (mapScaler.getPrefHeight() - mapScroller.getHeight());
 		
-		Double viewTopMapY = (mapScaler.getHeight() - mapScroller.getHeight()) * mapScroller.getVvalue();
+		Double viewTopMapY = (mapScaler.getPrefHeight() - mapScroller.getHeight()) * mapScroller.getVvalue();
 		Double viewCenterMapY = viewTopMapY + mapScroller.getHeight() / 2;
-		Double viewCenterMapYFraction = viewCenterMapY / mapScaler.getHeight();
+		Double viewCenterMapYFraction = viewCenterMapY / mapScaler.getPrefHeight();
 		
-		if (!deltaVvalue.isNaN() && !viewCenterMapYFraction.isNaN()) {
-			mapScroller.setVvalue(Math.min(Math.max(0, mapScroller.getVvalue() - deltaVvalue * viewCenterMapYFraction), 1));
+		if (Double.isFinite(deltaVvalue) && Double.isFinite(viewCenterMapYFraction)) {
+			mapScroller.setVvalue(clamp(0.0, mapScroller.getVvalue() - deltaVvalue * viewCenterMapYFraction, 1.0));
 		}
 	}
 	
@@ -111,8 +120,9 @@ public class MainController implements Initializable {
 		mapScroller.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent e) {
-				if (e.getDeltaY() != 0) {					
-					Double targetScale = mapScale.getX() + e.getDeltaY() * 0.01;
+				if (e.getDeltaY() != 0) {
+					Double scrollMultiplier = 0.01;
+					Double targetScale = mapScale.getX() + e.getDeltaY() * scrollMultiplier;
 					updateMapScale(mapScale, renderedMapSize, targetScale);
 				}
 				e.consume();
