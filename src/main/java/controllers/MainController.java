@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -22,7 +23,7 @@ import main.java.simulation.state.Tile;
 import main.java.simulation.state.Vector2D;
 
 public class MainController implements Initializable {
-	private final Integer tileSize = 128;
+	private final Integer tileSize = 144;
 
 	@FXML
 	private ScrollPane mapScroller;
@@ -130,6 +131,10 @@ public class MainController implements Initializable {
 		});
 	}
 	
+	private Image getSprite(String name) {
+		return new Image(getClass().getResource("../../resources/sprites/" + name).toExternalForm(), tileSize, tileSize, true, false);
+	}
+	
 	private void renderMap() {
 		// TODO: multiple layers
 		
@@ -143,7 +148,7 @@ public class MainController implements Initializable {
 			for (Tile simulationTile : column) {
 				Integer yTranslation = rowIndex * tileSize;
 
-				ImageView image = new ImageView(getClass().getResource("../../resources/images/tile-background.png").toExternalForm());
+				ImageView image = new ImageView(getSprite("tile.png"));
 				
 				Pane tileToRender = new Pane(image);
 				

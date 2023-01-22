@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Region;
@@ -23,28 +24,39 @@ import main.java.simulation.state.Vector2D;
 
 public class App extends Application {
 	private static Simulation simulation;
-
-	@Override
-	public void start(Stage stage) {
+	
+	private void setupSimulation() {		
+		Vector2D mapDimensions = new Vector2D(32, 18);
+		SimulationBuilder simulationBuilder = new SimulationBuilder(mapDimensions);
+		Species lion = new Species("Lion", 5, 3);
+		simulationBuilder.addPredatorPhenotype(lion, new Vector2D(16, 16));
+		App.simulation = simulationBuilder.getResult();
+	}
+	
+	private void setupVisualization(Stage stage) {		
 		try {
-			Vector2D mapDimensions = new Vector2D(32, 18);
-			SimulationBuilder simulationBuilder = new SimulationBuilder(mapDimensions);
-			Species lion = new Species("Lion", 5, 3);
-			simulationBuilder.addPredatorPhenotype(lion, new Vector2D(16, 16));
-			App.simulation = simulationBuilder.getResult();
-
+			Image icon = new Image(getClass().getResource("../resources/sprites/lion.png").toExternalForm(), 256, 256, true, false);
+			stage.getIcons().add(icon);
+			stage.setTitle("The Wild Hunt: Savana Edition");
+			
 			Parent root = FXMLLoader.load(getClass().getResource("../resources/views/main.fxml"));
 			Scene scene = new Scene(root, 800, 600);
 			scene.getStylesheets().add(getClass().getResource("../resources/styles/main.css").toExternalForm());
 			
-			stage.setTitle("The Wild Hunt: Savana Edition");
 			stage.setScene(scene);
 			stage.setMinWidth(360);
 			stage.setMinHeight(300);
+			
 			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void start(Stage stage) {
+		setupSimulation();
+		setupVisualization(stage);
 	}
 
 	public static void main(String[] args) {

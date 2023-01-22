@@ -4,8 +4,11 @@ import main.java.simulation.Simulation;
 import main.java.simulation.entities.AbstractEntity;
 import main.java.simulation.state.Vector2D;
 
-public abstract class AbstractPlace extends AbstractLocation {
-	public AbstractPlace(Simulation simulation, Vector2D position) {
+public class AbstractLocation extends AbstractEntity {
+
+	public AbstractLocation(Simulation simulation, Vector2D position) {
 		super(simulation, position);
+		// TODO Auto-generated constructor stub
 	}
+
 }

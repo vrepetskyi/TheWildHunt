@@ -5,7 +5,6 @@ import main.java.simulation.state.Vector2D;
 
 public abstract class AbstractEntity {
 	protected final Simulation simulation;
-	
 	protected final Vector2D position;
 	
 	public AbstractEntity(Simulation simulation, Vector2D position) {
