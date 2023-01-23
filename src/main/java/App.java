@@ -22,12 +22,13 @@ import javafx.stage.Stage;
 import main.java.simulation.Simulation;
 import main.java.simulation.SimulationBuilder;
 import main.java.simulation.entities.animals.Species;
+import main.java.simulation.entities.locations.Decoration;
 import main.java.simulation.state.Vector2D;
 
 public class App extends Application {
 	private static Simulation simulation;
 	
-	private static Integer secondsElapsed = 0;
+	private static Double secondsElapsed = 0.0;
 	
 	public static URL getResourceURL(String subpath) {
 		return App.class.getResource("../resources/" + subpath);
@@ -41,7 +42,7 @@ public class App extends Application {
 		return simulation;
 	}
 	
-	public static Integer getSecondsElapsed() {
+	public static Double getSecondsElapsed() {
 		return secondsElapsed;
 	}
 	
@@ -50,6 +51,7 @@ public class App extends Application {
 		SimulationBuilder simulationBuilder = new SimulationBuilder(mapDimensions);
 		Species lion = new Species("Lion", 5, 3);
 		simulationBuilder.addPredatorPhenotype(lion, new Vector2D(16, 16));
+		simulationBuilder.addLocation(new Decoration(simulation, new Vector2D(4, 9)));
 		App.simulation = simulationBuilder.getResult();
 	}
 	

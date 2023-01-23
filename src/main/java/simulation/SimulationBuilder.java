@@ -3,6 +3,7 @@ package main.java.simulation;
 import main.java.simulation.entities.animals.Predator;
 import main.java.simulation.entities.animals.Prey;
 import main.java.simulation.entities.animals.Species;
+import main.java.simulation.entities.locations.AbstractLocation;
 import main.java.simulation.entities.locations.AbstractPlace;
 import main.java.simulation.state.Map;
 import main.java.simulation.state.Vector2D;
@@ -22,7 +23,11 @@ public class SimulationBuilder implements Builder {
 	}
 
 	@Override
-	public void addPlace(AbstractPlace place) {
+	public void addLocation(AbstractLocation location) {
+		this.map.getTiles()
+			[location.getPosition().getX()]
+			[location.getPosition().getY()]
+			.setLocation(location);	
 	}
 
 	@Override

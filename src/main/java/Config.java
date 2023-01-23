@@ -1,7 +1,7 @@
 package main.java;
 
 public class Config {
-	private static final Integer tileSize = 144;
+	private static final Integer tileSize = 256;
 	private static final Integer referenceTimeMs = 1000;
 	private static Double speedMultiplier = 1.0;
 	

@@ -129,7 +129,7 @@ public class MainController implements Initializable {
 			@Override
 			public void handle(ScrollEvent e) {
 				if (e.getDeltaY() != 0) {
-					Double scrollMultiplier = 0.01;
+					Double scrollMultiplier = 0.001;
 					Double targetScale = mapScale.getX() + e.getDeltaY() * scrollMultiplier;
 					updateMapScale(mapScale, renderedMapSize, targetScale);
 				}
@@ -148,6 +148,12 @@ public class MainController implements Initializable {
 				// render background
 				Node backgroundComponent = new StaticRenderer("tile.png", tile.getPosition()).getComponent();
 				backgroundComponents.add(backgroundComponent);
+				
+				// render locations
+				if (tile.getLocation() != null) {
+					Node locationComponent = new StaticRenderer("lion.png", tile.getPosition()).getComponent();
+					foregroundComponents.add(locationComponent);
+				}
 				
 				// render component for handling events on tile
 				Node actionComponent = new StaticRenderer(tile.getPosition()).getComponent();
@@ -184,12 +190,12 @@ public class MainController implements Initializable {
 		        actionComponent.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 		        	@Override
 		        	public void handle(MouseEvent e) {
-		        		cursorPosition.setText(
-	        				"X: " +
-	        				tile.getPosition().getX().toString() +
-	        				", Y: " +
-	        				tile.getPosition().getY().toString()
-        				);
+		        		String cursorPositionText = String.format(
+	        				"X: %02d, Y: %02d",
+	        				tile.getPosition().getX(),
+	        				tile.getPosition().getY()
+		        		);
+		        		cursorPosition.setText(cursorPositionText);
 		        	}
 		        });
 		        
@@ -203,7 +209,9 @@ public class MainController implements Initializable {
 		        cursorPosition.setText(defaultCursorPositionText);
 		        
 		        // timer
-		        timer.setText("00:00:00");
+		        Integer allSeconds = (int) Math.round(App.getSecondsElapsed());
+		        String timeElapsed = String.format("%02d:%02d:%02d", allSeconds / 3600, (allSeconds % 3600) / 60, allSeconds % 60);
+		        timer.setText(timeElapsed);
 			}
 		}
 	}
