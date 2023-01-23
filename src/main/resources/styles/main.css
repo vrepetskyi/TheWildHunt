@@ -1,7 +1,9 @@
-/* TODO */
-#mapContainer .label:hover {
-	-fx-background: gray;
-	-fx-text-fill: red;
+#action {
+	-fx-cursor: hand;
+}
+
+#action * {
+	-fx-background-color: black;
 }
 
 #menu {
@@ -29,4 +31,8 @@
 #simulationMenu:hover,
 #simulationMenu:showing {
 	-fx-background-color: orange !important;
+}
+
+#separator {
+	-fx-opacity: 0.5;
 }

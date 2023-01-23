@@ -1,5 +1,7 @@
 package main.java;
 
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +27,24 @@ import main.java.simulation.state.Vector2D;
 public class App extends Application {
 	private static Simulation simulation;
 	
+	private static Integer secondsElapsed = 0;
+	
+	public static URL getResourceURL(String subpath) {
+		return App.class.getResource("../resources/" + subpath);
+	}
+	
+	public static String getResourcePath(String subpath) {
+		return getResourceURL(subpath).toExternalForm();
+	}
+	
+	public static Simulation getSimulation() {
+		return simulation;
+	}
+	
+	public static Integer getSecondsElapsed() {
+		return secondsElapsed;
+	}
+	
 	private void setupSimulation() {		
 		Vector2D mapDimensions = new Vector2D(32, 18);
 		SimulationBuilder simulationBuilder = new SimulationBuilder(mapDimensions);
@@ -35,13 +55,13 @@ public class App extends Application {
 	
 	private void setupVisualization(Stage stage) {		
 		try {
-			Image icon = new Image(getClass().getResource("../resources/sprites/lion.png").toExternalForm(), 256, 256, true, false);
+			Image icon = new Image(getResourcePath("sprites/lion.png"), 256, 256, true, false);
 			stage.getIcons().add(icon);
 			stage.setTitle("The Wild Hunt: Savana Edition");
 			
-			Parent root = FXMLLoader.load(getClass().getResource("../resources/views/main.fxml"));
+			Parent root = FXMLLoader.load(getResourceURL("views/main.fxml"));
 			Scene scene = new Scene(root, 800, 600);
-			scene.getStylesheets().add(getClass().getResource("../resources/styles/main.css").toExternalForm());
+			scene.getStylesheets().add(getResourcePath("styles/main.css"));
 			
 			stage.setScene(scene);
 			stage.setMinWidth(360);
@@ -61,9 +81,5 @@ public class App extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
-	}
-
-	public static Simulation getSimulation() {
-		return simulation;
 	}
 }

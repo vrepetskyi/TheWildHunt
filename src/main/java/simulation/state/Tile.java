@@ -4,28 +4,35 @@ import java.util.HashSet;
 
 import main.java.simulation.entities.animals.Predator;
 import main.java.simulation.entities.animals.Prey;
-import main.java.simulation.entities.locations.AbstractPlace;
+import main.java.simulation.entities.locations.AbstractLocation;
 
 public final class Tile {
-	private AbstractPlace place;
+	private final Vector2D position;
+	
+	private AbstractLocation location;
 	
 	private final HashSet<Predator> predators;
 	private final HashSet<Prey> preys;
 	
 	private final HashSet<Vector2D> reachablePoints;
 	
-	public Tile() {
+	public Tile(Vector2D position) {
+		this.position = position;
 		this.predators = new HashSet<>();
 		this.preys = new HashSet<>();
 		this.reachablePoints = new HashSet<>();
 	}
 	
-	public void setPlace(AbstractPlace place) {
-		this.place = place;
+	public Vector2D getPosition() {
+		return position;
 	}
 
-	public AbstractPlace getPlace() {
-		return place;
+	public void setLocation(AbstractLocation location) {
+		this.location = location;
+	}
+
+	public AbstractLocation getLocation() {
+		return location;
 	}
 	
 	public HashSet<Predator> getPredators() {

@@ -1,6 +1,5 @@
 package main.java.simulation.state;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
 import main.java.simulation.entities.animals.Predator;
@@ -21,7 +20,11 @@ public final class Map {
 		this.dimensions = dimensions;
 
 		Tile[][] tiles = new Tile[dimensions.getX()][dimensions.getY()];
-		Arrays.stream(tiles).forEach(column -> Arrays.fill(column, new Tile()));
+		for (Integer column = 0; column < dimensions.getX(); column++ ) {			
+			for (Integer row = 0; row < dimensions.getY(); row++ ) {
+				tiles[column][row] = new Tile(new Vector2D(column, row));
+			}
+		}
 		this.tiles = tiles;
 
 		this.places = new HashSet<>();
